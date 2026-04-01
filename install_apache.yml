@@ -3,9 +3,6 @@
 - hosts: all
   become: true
   tasks:
-    # ============================================
-    # ЗАДАЧИ ДЛЯ UBUNTU/DEBIAN
-    # ============================================
     - name: Update repository index (Ubuntu/Debian)
       apt:
         update_cache: yes
@@ -23,9 +20,6 @@
         state: latest
       when: ansible_distribution in ["Ubuntu", "Debian"]
 
-    # ============================================
-    # ЗАДАЧИ ДЛЯ CENTOS/RHEL
-    # ============================================
     - name: Update repository index (CentOS/RHEL)
       dnf:
         update_cache: yes
