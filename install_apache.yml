@@ -3,16 +3,42 @@
 - hosts: all
   become: true
   tasks:
-    - name: Update repository index
+    # ============================================
+    # ЗАДАЧИ ДЛЯ UBUNTU/DEBIAN
+    # ============================================
+    - name: Update repository index (Ubuntu/Debian)
       apt:
         update_cache: yes
+      when: ansible_distribution in ["Ubuntu", "Debian"]
 
-    - name: Install apache2 package
+    - name: Install apache2 package (Ubuntu/Debian)
       apt:
         name: apache2
         state: latest
+      when: ansible_distribution in ["Ubuntu", "Debian"]
 
-    - name: Add PHP support for Apache
+    - name: Add PHP support for Apache (Ubuntu/Debian)
       apt:
-       name:  libapache2-mod-php
-       state: latest
+        name: libapache2-mod-php
+        state: latest
+      when: ansible_distribution in ["Ubuntu", "Debian"]
+
+    # ============================================
+    # ЗАДАЧИ ДЛЯ CENTOS/RHEL
+    # ============================================
+    - name: Update repository index (CentOS/RHEL)
+      dnf:
+        update_cache: yes
+      when: ansible_distribution in ["CentOS", "RedHat"]
+
+    - name: Install httpd package (CentOS/RHEL)
+      dnf:
+        name: httpd
+        state: latest
+      when: ansible_distribution in ["CentOS", "RedHat"]
+
+    - name: Install PHP (CentOS/RHEL)
+      dnf:
+        name: php
+        state: latest
+      when: ansible_distribution in ["CentOS", "RedHat"]
