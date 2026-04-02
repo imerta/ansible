@@ -8,3 +8,5 @@
 [file_servers]
 10.10.2.13 
 
+[workstations]
+10.10.2.10 ansible_ssh_private_key_file=/home/andrey/.ssh/ansible 

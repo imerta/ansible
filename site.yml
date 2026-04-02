@@ -44,6 +44,16 @@
         state: latest
       when: ansible_distribution == "Ubuntu"
 
+        # КОПИРОВАНИЕ HTML-ФАЙЛА (новая задача)
+    - name: копирование html файла на веб-серверы
+      tags: apache, apache2, httpd
+      copy:
+        src: default_site.html          # исходный файл (ищется в папке files)
+        dest: /var/www/html/index.html  # куда копируем на сервере
+        owner: root                     # владелец
+        group: root                     # группа
+        mode: 0644                      # права доступа (rw-r--r--)
+
 # БЛОК 3: УСТАНОВКА БАЗЫ ДАННЫХ (только на db_servers)
 - hosts: db_servers
   become: true
