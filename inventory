@@ -1,4 +1,10 @@
-10.10.2.11
+[web_servers]
+10.10.2.11 
+10.10.2.14 ansible_user=user 
+
+[db_servers]
 10.10.2.12
-10.10.2.13
-10.10.2.14 ansible_user=user
+
+[file_servers]
+10.10.2.13 
+

@@ -1,0 +1,82 @@
+---
+
+# БЛОК 1: ОБНОВЛЕНИЯ ДЛЯ ВСЕХ СЕРВЕРОВ (pre_tasks с тегом "always")
+- hosts: all
+  become: true
+  pre_tasks:
+    # Обновление для CentOS
+    - name: установка обновлений на CentOS
+      tags: always                         # ← этот тег означает "выполнять всегда"
+      yum:
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+    # Обновление для Ubuntu
+    - name: установка обновлений на Ubuntu
+      tags: always                         # ← этот тег означает "выполнять всегда"
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+# БЛОК 2: УСТАНОВКА ВЕБ-СЕРВЕРА (только на web_servers)
+- hosts: web_servers
+  become: true
+  tasks:
+    # Установка Apache и PHP для CentOS
+    - name: установка httpd пакета на CentOS
+      tags: apache, centos, httpd         # ← несколько тегов для одной задачи
+      yum:
+        name:
+          - httpd
+          - php
+        state: latest
+      when: ansible_distribution == "CentOS"
+
+    # Установка Apache и PHP для Ubuntu
+    - name: установка apache2 пакета на Ubuntu
+      tags: apache, apache2, ubuntu       # ← несколько тегов для одной задачи
+      apt:
+        name:
+          - apache2
+          - libapache2-mod-php
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+# БЛОК 3: УСТАНОВКА БАЗЫ ДАННЫХ (только на db_servers)
+- hosts: db_servers
+  become: true
+  tasks:
+    # Установка MariaDB для CentOS
+    - name: установка пакета mariadb на CentOS
+      tags: centos, db, mariadb
+      yum:
+        name: mariadb
+        state: latest
+      when: ansible_distribution == "CentOS"
+
+    # Установка MariaDB для Ubuntu
+    - name: установка пакета mariadb-server на Ubuntu
+      tags: db, mariadb, ubuntu
+      apt:
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+# БЛОК 4: УСТАНОВКА ФАЙЛОВОГО СЕРВЕРА (только на file_servers)
+- hosts: file_servers
+  become: true
+  tasks:
+    # Установка Samba (имя пакета одинаковое на всех дистрибутивах)
+    - name: установка пакета samba
+      tags: samba                         # ← один тег для задачи
+      package:
+        name: samba
+        state: latest
+
+
+
+
+
+
